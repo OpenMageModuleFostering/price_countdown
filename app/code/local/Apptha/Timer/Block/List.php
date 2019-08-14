@@ -16,7 +16,19 @@
  * =================================================================
  */
 
-class Apptha_Timer_Helper_Data extends Mage_Core_Helper_Abstract
+class Apptha_Timer_Block_List extends Mage_Catalog_Block_Product_List
 {
+    protected function _prepareLayout()
+    {
+        $block = $this->getLayout()->getBlock('product_list');
+        if ($block) {
+            $block->setTemplate('timer/list.phtml');
+        }
 
+        $block = $this->getLayout()->getBlock('search_result_list');
+        if ($block) {
+            $block->setTemplate('timer/list.phtml');
+        }
+    }
 }
+?>

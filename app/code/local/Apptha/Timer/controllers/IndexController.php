@@ -16,7 +16,11 @@
  * =================================================================
  */
 
-class Apptha_Timer_Helper_Data extends Mage_Core_Helper_Abstract
+class Apptha_Timer_IndexController extends Mage_Core_Controller_Front_Action
 {
-
+    public function indexAction()
+    {	
+		$this->loadLayout();     
+		$this->renderLayout();
+    }
 }

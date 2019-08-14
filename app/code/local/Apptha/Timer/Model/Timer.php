@@ -16,7 +16,11 @@
  * =================================================================
  */
 
-class Apptha_Timer_Helper_Data extends Mage_Core_Helper_Abstract
+class Apptha_Timer_Model_Timer extends Mage_Core_Model_Abstract
 {
-
+    public function _construct()
+    {
+        parent::_construct();
+        $this->_init('timer/timer');
+    }
 }
