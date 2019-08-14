@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Price_Countdown",
+    "type": "magento-module",
+    "license": "OSL-v3.0",
+    "homepage": "",
+    "description": "Countdown timer for Special product price to date. Timer displays according to the special price and to date set while adding products.",
+    "authors": [
+    {
+        "name": "LEAD",
+        "email": "info@apptha.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
