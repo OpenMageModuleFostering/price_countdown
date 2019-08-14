@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Apptha
  *
@@ -28,12 +27,16 @@
  * @license     http://www.apptha.com/LICENSE.txt
  *
  */
-  -->
-<config>
-    <modules>
-        <Apptha_Timer>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Apptha_Timer>
-    </modules>
-</config> 
+class Apptha_Timer_Block_Product_List extends Mage_Catalog_Block_Product_List
+{
+	public function getPriceCountDown($_product){
+		if(Mage::helper('timer')->isEnabled()){
+			if($_product->getPrice() > $_product->getSpecialPrice()){
+				if($_product->getSpecialPrice() != 0 || $_product->getSpecialPrice()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}

@@ -1,19 +1,31 @@
 <?php
 /**
- * Contus Support Interactive.
+ * Apptha
  *
  * NOTICE OF LICENSE
  *
  * This source file is subject to the EULA
- * that is bundled with this package in the file PRICE COUNTDOWN-LICENSE.txt.
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apptha.com/LICENSE.txt
  *
- * =================================================================
+ * ==============================================================
  *                 MAGENTO EDITION USAGE NOTICE
- * =================================================================
- * This package designed for Magento 1.4.x, 1.5.x, 1.6.x and 1.7.x COMMUNITY edition
- * Contus Support does not guarantee correct work of this package
- * on any other Magento edition except Magento 1.4.x, 1.5.x, 1.6.x and 1.7.x COMMUNITY edition.
- * =================================================================
+ * ==============================================================
+ * This package designed for Magento COMMUNITY edition
+ * Apptha does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * Apptha does not provide extension support in case of
+ * incorrect edition usage.
+ * ==============================================================
+ *
+ * @category    Apptha
+ * @package     Apptha_PriceCount
+ * @version     0.1.4
+ * @author      Apptha Team <developers@contus.in>
+ * @copyright   Copyright (c) 2014 Apptha. (http://www.apptha.com)
+ * @license     http://www.apptha.com/LICENSE.txt
+ *
  */
 ?>
 <?php
@@ -28,15 +40,6 @@
 $count = 1;
 $_productCollection=$this->getLoadedProductCollection();
 $_helper = $this->helper('catalog/output');
-
-/* Admin Controllers for timer are declared here */
-$timer_active = Mage::getStoreConfig('timer/general/activate_apptha_timer');
-$timer_head_active = Mage::getStoreConfig('timer/general/activate_apptha_heading');
-$timer_desc_active = Mage::getStoreConfig('timer/general/activate_apptha_description');
-$timer_color = Mage::getStoreConfig('timer/apptha_timer_color/text');
-$desc_color = Mage::getStoreConfig('timer/apptha_timer_color/description');
-$head_color = Mage::getStoreConfig('timer/apptha_timer_color/heading_text_color');
-$timer_head = Mage::getStoreConfig('timer/general/heading');
 ?>
 
 <?php if(!$_productCollection->count()): ?>
@@ -65,16 +68,24 @@ $timer_head = Mage::getStoreConfig('timer/general/heading');
 <?php echo $this->getPriceHtml($_product, true) ?>
 
 <!--Condition for Timer Controllers goes here-->
-<?php if($timer_active == 1) :?>
-<?php if($_product->getPrice() > $_product->getSpecialPrice()) : ?>
-<?php if($_product->getSpecialPrice()!= 0 || $_product->getSpecialPrice()!= "" ) :?>
-<?php if($timer_head_active == 'showall' || $timer_head_active == 'listpage' && $timer_head_active!='hideall' && $timer_head!= '') : ?>
-                        <div id="heading<?php echo $count; ?>" style="color:#<?php echo $head_color; ?>; font-size: 14px; font-weight:bold;padding-top:0px;clear: both;"><?php echo $timer_head ?></div>
+<?php if($this->getPriceCountDown($_product)) :?>
+	<?php if (Mage::helper('timer')->isShowTitle()): ?>
+	    <div id="heading<?php echo $count; ?>" style="color:#<?php echo $head_color; ?>; font-size: 14px; font-weight:bold;padding-top:0px;clear: both;">
+	    	<?php echo Mage::helper('timer')->getTimerTitle(); ?>
+	    </div>
+	<?php endif; ?>
+    <div id="countbox_<?php echo $count; ?>" class="timer-list"></div>
+	<?php if (Mage::helper('timer')->isShowCaption()): ?>
+	    <div class='clear'></div>
+	    <div class='timerdate' id="caption<?php echo $count; ?>">
+	    	<span class='hour' style='margin:1px 23px 0 4px'><?php echo $this->__('D') ?></span>
+	    	<span class='hour' style='margin:1px 19px 0 6px'><?php echo $this->__('H') ?></span>
+	    	<span class='min'  style='margin:1px 20px 0 7px'><?php echo $this->__('M') ?></span>
+	    	<span class='sec' style='margin:1px 0 0 6px'><?php echo $this->__('S') ?></span>
+	    </div>
+	<?php endif;?>
 <?php endif; ?>
-                        <div id="countbox_<?php echo $count; ?>" class="timer-list"></div>
-<?php if($timer_desc_active == 'showall' || $timer_desc_active == 'listpage' && $timer_desc_active!='hideall') : ?>
-                        <div class='clear'></div><div class='timerdate' id="caption<?php echo $count; ?>"><span class='hour' style='margin:1px 23px 0 4px'><?php echo $this->__('D') ?></span><span class='hour' style='margin:1px 19px 0 6px'><?php echo $this->__('H') ?></span><span class='min'  style='margin:1px 20px 0 7px'><?php echo $this->__('M') ?></span><span class='sec' style='margin:1px 0 0 6px'><?php echo $this->__('S') ?></span></div>
-<?php endif;endif;endif;endif; ?>
+<!--Condition for Timer Controllers End -->
 
 <?php if($_product->isSaleable()): ?>
 <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
@@ -93,24 +104,6 @@ $timer_head = Mage::getStoreConfig('timer/general/heading');
 <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
 <?php endif; ?>
 </ul>
-<?php if($_product->getPrice() > $_product->getSpecialPrice()) : ?>
-<?php if($_product->getSpecialPrice()!= 0 || $_product->getSpecialPrice()!= "" ) :?>
-        <script type="text/javascript">
-            var dthen<?php echo $count; ?> = new Date("<?php echo Date("m/d/y", strtotime($toDate)).' 11:59:00 PM'; ?>");
-            start = "<?php echo Date("m/d/y h:i:s A", strtotime(Mage_Core_Model_Locale::date(null, null, "en_US", true))); ?>";
-            start_date = Date.parse(start);
-            var dnow<?php echo $count; ?> = new Date(start_date);
-            if(CountStepper>0)
-                ddiff= new Date((dnow<?php echo $count; ?>)-(dthen<?php echo $count; ?>));
-            else
-                ddiff = new Date((dthen<?php echo $count; ?>)-(dnow<?php echo $count; ?>));
-            gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf()/1000);
-            var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
-            CountBack(gsecs<?php echo $count; ?>,"countbox_"+j, j);
-            j++;
-        </script>
-<?php $count = $count + 1; ?>
- <?php endif;endif; ?>
 </div>
 </div>
 </li>
@@ -138,43 +131,33 @@ $timer_head = Mage::getStoreConfig('timer/general/heading');
 <?php echo $this->getPriceHtml($_product, true) ?>
 
 <!--Condition for Timer Controllers goes here-->
-<?php if($timer_active == 1) :?>
-<?php if($_product->getPrice() > $_product->getSpecialPrice()) : ?>
-<?php if($_product->getSpecialPrice()!= 0 || $_product->getSpecialPrice()!= "" ) :?>
-<?php if($timer_head_active == 'showall' || $timer_head_active == 'listpage' && $timer_head_active!='hideall' && $timer_head!= '') : ?>
-                        <div id="heading<?php echo $count; ?>" style="color:#<?php echo $head_color; ?>; font-size: 14px; font-weight:bold;padding-top:3px;clear: both;"><?php echo $timer_head ?></div>
+<?php if($this->getPriceCountDown($_product)) :?>
+	<?php if (Mage::helper('timer')->isShowTitle()): ?>
+	    <div id="heading<?php echo $count; ?>" style="color:#<?php echo $head_color; ?>; font-size: 14px; font-weight:bold;padding-top:0px;clear: both;">
+	    	<?php echo Mage::helper('timer')->getTimerTitle(); ?>
+	    </div>
+	<?php endif; ?>
+    <div id="countbox_<?php echo $count; ?>" class="timer-list"></div>
+	<?php if (Mage::helper('timer')->isShowCaption()): ?>
+	    <div class='clear'></div>
+	    <div class='timerdate' id="caption<?php echo $count; ?>">
+	    	<span class='hour' style='margin:1px 23px 0 4px'><?php echo $this->__('D') ?></span>
+	    	<span class='hour' style='margin:1px 19px 0 6px'><?php echo $this->__('H') ?></span>
+	    	<span class='min'  style='margin:1px 20px 0 7px'><?php echo $this->__('M') ?></span>
+	    	<span class='sec' style='margin:1px 0 0 6px'><?php echo $this->__('S') ?></span>
+	    </div>
+	<?php endif;?>
 <?php endif; ?>
-                        <div id="countbox_<?php echo $count; ?>" class="timer-grid"></div>
-<?php if($timer_desc_active == 'showall' || $timer_desc_active == 'listpage' && $timer_desc_active!='hideall') : ?>
-                        <div class='clear'></div><div class='timerdate' id="caption<?php echo $count; ?>"><span class='hour' style='margin:1px 23px 0 8px'><?php echo $this->__('D') ?></span><span class='hour' style='margin:1px 24px 0 1px'><?php echo $this->__('H') ?></span><span class='min'  style='margin:1px 21px 0 3px'><?php echo $this->__('M') ?></span><span class='sec' style='margin:1px 0 0 6px'><?php echo $this->__('S') ?></span></div>
-<?php endif;endif;endif;endif; ?>
+<!--Condition for Timer Controllers End -->
+
+
+
 <div class="actions">
 <?php if($_product->isSaleable()): ?>
 <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
 <?php else: ?>
 <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
 <?php endif; ?>
-
-<?php if($_product->getPrice() > $_product->getSpecialPrice()) : ?>
-<?php if($_product->getSpecialPrice()!= 0 || $_product->getSpecialPrice()!= "" ) :?>
-        <script type="text/javascript">
-            var dthen<?php echo $count; ?> = new Date("<?php echo Date("m/d/y", strtotime($toDate)).' 11:59:00 PM'; ?>");
-            start = "<?php echo Date("m/d/y h:i:s A", strtotime(Mage_Core_Model_Locale::date(null, null, "en_US", true))); ?>";
-            start_date = Date.parse(start);
-            var dnow<?php echo $count; ?> = new Date(start_date);
-            if(CountStepper>0)
-                ddiff= new Date((dnow<?php echo $count; ?>)-(dthen<?php echo $count; ?>));
-            else
-                ddiff = new Date((dthen<?php echo $count; ?>)-(dnow<?php echo $count; ?>));
-            gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf()/1000);
-
-            var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
-            CountBack(gsecs<?php echo $count; ?>,"countbox_"+j, j);
-            j++;
-        </script>
-<?php $count = $count + 1; ?>
-<?php endif;endif; ?>
-
 <ul class="add-to-links">
 <?php if ($this->helper('wishlist')->isAllow()) : ?>
 <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
@@ -198,6 +181,32 @@ $timer_head = Mage::getStoreConfig('timer/general/heading');
 </div>
 <?php endif; ?>
 
+
+<!--  Timer Script Start here -->
+<?php 
+/* Admin Controllers for timer are declared here */
+$timer_color = Mage::getStoreConfig('timer/apptha_timer_color/text');
+$desc_color = Mage::getStoreConfig('timer/apptha_timer_color/description');
+$head_color = Mage::getStoreConfig('timer/apptha_timer_color/heading_text_color');
+?>
+<?php if($this->getPriceCountDown($_product)) :?>
+<script type="text/javascript">
+	var dthen<?php echo $count; ?> = new Date("<?php echo Date("m/d/y", strtotime($toDate)).' 11:59:00 PM'; ?>");
+	start = "<?php echo Date("m/d/y h:i:s A", strtotime(Mage_Core_Model_Locale::date(null, null, "en_US", true))); ?>";
+	start_date = Date.parse(start);
+	var dnow<?php echo $count; ?> = new Date(start_date);
+	if(CountStepper>0)
+	ddiff= new Date((dnow<?php echo $count; ?>)-(dthen<?php echo $count; ?>));
+	else
+	ddiff = new Date((dthen<?php echo $count; ?>)-(dnow<?php echo $count; ?>));
+	gsecs<?php echo $count; ?> = Math.floor(ddiff.valueOf()/1000);
+	var iid<?php echo $count; ?> = "countbox_<?php echo $count; ?>";
+	CountBack(gsecs<?php echo $count; ?>,"countbox_"+timer, timer);
+	timer++;
+</script>
+<?php $count = $count + 1; ?>
+<?php endif;?>
+<!--  Timer Script End here -->
 <!--Dynamic style changes goes here-->
 <style>
 .timer-grid{float: left;width: 100%;padding: 0;color: #<?php echo $timer_color; ?>;font-size: 18px;font-family: arial;font-weight: bold;}
