@@ -31,9 +31,14 @@ class Apptha_Timer_Block_Product_View extends Mage_Catalog_Block_Product_View
 {
     public function getPriceCountDown(){
     	if(Mage::helper('timer')->isEnabled()){
-    		if($this->getProduct()->getPrice() > $this->getProduct()->getSpecialPrice()){
-    			if($this->getProduct()->getSpecialPrice() != 0 || $this->getProduct()->getSpecialPrice()){
-    				return true;
+    		$currentDate = Mage::getModel('core/date')->date('Y-m-d');
+    		$todate =  $this->getProduct()->getSpecialToDate();
+    		$fromdate =  $this->getProduct()->getSpecialFromDate();
+    		if($this->getProduct()->getSpecialPrice() != 0 || $this->getProduct()->getSpecialPrice()) {
+    			if($this->getProduct()->getSpecialToDate() != null) {
+    				if(strtotime($todate) >= strtotime($currentDate) && strtotime($fromdate) <= strtotime($currentDate)){
+    					return true;
+    				}	
     			}
     		}
     	}

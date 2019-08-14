@@ -32,7 +32,7 @@
 <config>
     <modules>
         <Apptha_Timer>
-            <version>1.3.0</version>
+            <version>0.1.4</version>
         </Apptha_Timer>
     </modules>
     <global>
@@ -75,8 +75,8 @@
         <timer>
             <general>
                 <enabled>1</enabled>
-                <activate_apptha_heading>showall</activate_apptha_heading>
-                <activate_apptha_description>showall</activate_apptha_description>
+                <timer_heading>showall</timer_heading>
+                <timer_catption>showall</timer_catption>
                 <title>Price CountDown</title>
             </general>
             <apptha_timer_color>

@@ -57,23 +57,28 @@ class Apptha_Timer_Helper_Data extends Mage_Core_Helper_Abstract
 		return $this->conf(self::XML_PATH_TITLE, $store);
 	}
 	
-	public function isShowTitle(){
-		if($this->isTimerHeading() == 'showall' || $this->isTimerHeading() == 'viewpage'){
-			if($this->isTimerHeading() != 'hideall'){
-				if($this->getTimerTitle())
-					return true;
-			}
+	public function isShowTitle($currentpage = null){
+		if($this->isTimerHeading() == 'showall'){
+			return true;
+		} else if($this->isTimerHeading() == $currentpage){
+			return true;
+		} else if($this->isTimerHeading() != 'hideall'){
+			return false;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
-	public function isShowCaption(){
-		if ($this->isTimerCaption() == 'showall' || $this->isTimerCaption() == 'viewpage') {
-			if($this->isTimerCaption() != 'hideall'){
-				return true;
-			}
+	public function isShowCaption($currentpage = null){
+		if ($this->isTimerCaption() == 'showall'){
+			return true;
+		} else if($this->isTimerCaption() == $currentpage) {
+			return true;
+		} else if($this->isTimerCaption() != 'hideall'){
+				return false;
+		}else {
+			return false;
 		}
-		return false;
 	}
 	
 }
